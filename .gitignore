@@ -37,3 +37,15 @@ bazel-genfiles.*
 bazel-out.*
 bazel-para.*
 bazel-testlogs.*
+
+bazel-bin/*
+bazel-genfiles/*
+bazel-out/*
+bazel-para/*
+bazel-testlogs/*
+
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-para
+bazel-testlogs
