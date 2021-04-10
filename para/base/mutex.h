@@ -29,7 +29,7 @@ using MutexLock = std::lock_guard<MutexType>;
 #endif
 
 // Class template to wrap up both
-template <template <typename> typename LockType, typename MutexType>
+template <template <typename> class LockType, typename MutexType>
 class GenericLock {
  public:
   GenericLock() = default;
