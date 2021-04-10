@@ -2,6 +2,15 @@
 cc_library(
   name = "base",
   srcs = [],
-  hdrs = ["mutex.h"],
+  hdrs = ["mutex.h",],
   deps = [],
+)
+
+cc_test(
+  name = "mutex_test",
+  srcs = ["mutex_test.cc"],
+  deps = [
+    "@gtest//:gtest",
+    ":base",
+  ]
 )
