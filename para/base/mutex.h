@@ -1,3 +1,6 @@
+// Copyright 2021
+// Authors: Weixiong (Victor) Zheng
+
 #pragma once
 
 #include <mutex>
