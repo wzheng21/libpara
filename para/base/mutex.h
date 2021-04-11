@@ -21,11 +21,21 @@ using SharedMutex = std::shared_timed_mutex;
 #endif
 
 #if __cplusplus >= 201703L
-template <typename... MutexTypes>
-using MutexLock = std::scoped_lock<MutexTypes...>;
-#else
 template <typename MutexType>
-using MutexLock = std::lock_guard<MutexType>;
+class MutexLock {
+ public:
+  explicit MutexLock(MutexType* mu) : lk_(*mu) {}
+ private:
+  std::lock_guard<MutexType> lk_;
+};
+#else
+template <typename... MutexTypes>
+class MutexLock {
+ public:
+  explicit MutexLock(MutexTypes*... mu) : lk_(*mu...) {}
+ private:
+  std::scoped_lock<MutexTypes...> lk_;
+};
 #endif
 
 // Class template to wrap up both

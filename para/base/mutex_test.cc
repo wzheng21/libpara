@@ -6,7 +6,7 @@ namespace para {
 TEST(MutexLock, MutexLock) {
   {
     Mutex mu;
-    MutexLock l(mu);
+    MutexLock l(&mu);
   }
 }
 
