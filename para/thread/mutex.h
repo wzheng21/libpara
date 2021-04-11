@@ -20,7 +20,7 @@ using SharedMutex = std::shared_mutex;
 using SharedMutex = std::shared_timed_mutex;
 #endif
 
-#if __cplusplus >= 201703L
+#if __cplusplus < 201703L
 template <typename MutexType>
 class MutexLock {
  public:

@@ -1,6 +1,6 @@
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
 cc_library(
-  name = "base",
+  name = "thread",
   srcs = [],
   hdrs = ["mutex.h",],
   deps = [],
