@@ -13,29 +13,31 @@ load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 
 def _impl(ctx):
     #TODO: change the hard-coded bindir for MacOSX to sth smart for different platforms
-    usrdir = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr"
+    #usrdir = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr"
+    usrdir = "/home/victor/.linuxbrew/Cellar/llvm/11.1.0_3"
     bindir = "{}/bin".format(usrdir)
+    brew_bindir = "/home/victor/.linuxbrew/bin"
     tool_paths = [
-        tool_path(name = "ar", path = "{}/llvm-ar".format(bindir)),
-        tool_path(name = "compat-ld", path = "{}/ld".format(bindir)),
-        tool_path(name = "cpp", path = "{}/clang++".format(bindir)),
-        tool_path(name = "dwp", path = "{}/dwp".format(bindir)),
-        tool_path(name = "gcov", path = "{}/gcov".format(bindir)),
-        tool_path(name = "ld", path = "{}/lld".format(bindir)),
-        tool_path(name = "nm", path = "{}/llvm-nm".format(bindir)),
-        tool_path(name = "objdump", path = "{}/llvm-objdump".format(bindir)),
-        tool_path(name = "strip", path = "{}/strip".format(bindir)),
-        tool_path(name = "gcc", path = "{}/clang".format(bindir)),
+        tool_path(name = "ar", path = "{}/ar".format(brew_bindir)),
+        tool_path(name = "compat-ld", path = "{}/ld".format(brew_bindir)),
+        tool_path(name = "cpp", path = "{}/g++-10".format(brew_bindir)),
+        tool_path(name = "dwp", path = "{}/dwp".format(brew_bindir)),
+        tool_path(name = "gcov", path = "{}/gcov".format("/usr/bin")),
+        tool_path(name = "ld", path = "{}/lld".format(brew_bindir)),
+        tool_path(name = "nm", path = "{}/nm".format(brew_bindir)),
+        tool_path(name = "objdump", path = "{}/objdump".format(brew_bindir)),
+        tool_path(name = "strip", path = "{}/strip".format(brew_bindir)),
+        tool_path(name = "gcc", path = "{}/gcc-10".format(brew_bindir)),
     ]
     cxx_builtin_include_directories = [
-        "{}/include".format(usrdir),
-        "{}/lib/clang/11.0.0/include".format(usrdir),
-        "/usr/lib/gcc/x86_64-linux-gnu",
+        "/home/victor/.linuxbrew/Cellar/gcc/10.2.0_4/include/c++/10.2.0",
+        "/home/victor/.linuxbrew/Cellar/gcc/10.2.0_4/lib/gcc/10/gcc/x86_64-pc-linux-gnu/10.2.0/include",
+        "/home/victor/.linuxbrew/Cellar/gcc/10.2.0_4/lib/gcc/10/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed",
         "/usr/include/x86_64-linux-gnu",
         "/usr/local/include",
         "/usr/include",
-        "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/",
-        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include",
+#        "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/",
+#        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include",
     ]
 
     #NOTE: The following actions are from tensorflow's setting. See:
@@ -110,10 +112,10 @@ def _impl(ctx):
                         flags = [
                             # opt O3
                             "-g",
-                            "-DNDEBUG",
+                            #"-DNDEBUG",
                             "-O3",
-                            "-std=c++2a",
-                            "-Wthread-safety",
+                            "-std=c++17",
+                            #"-Wthread-safety",
                             "-Wno-unknown-pragmas",
                             "-Wno-inconsistent-missing-override",
                             "-Wno-deprecated-declarations",
@@ -124,10 +126,11 @@ def _impl(ctx):
                             "-fno-omit-frame-pointer",
                             #"-fopenmp", #TODO: On OSX with apple toolchain, this option is not supported. Resolve this
 			                      "-fvisibility=hidden",
-                            "-stdlib=libc++",
+                            #"-stdlib=libc++",
                             "-DC3D_STD_STRING_IMPLEMENTATION_TYPE=2",
                             "-D_FORTIFY_SOURCE=1",
                             "-DGTEST_DONT_DEFINE_FAIL=1",
+                            "-nostartfiles",
                         ],
                     ),
                 ],
@@ -145,9 +148,10 @@ def _impl(ctx):
                 flag_groups = ([
                     flag_group(
                         flags = [
-                            "-ldl",
-                            "-lc++abi",
-                            "-lc++",
+                            #"-ldl",
+                            #"-l++abi",
+                            #
+                            "-lstdc++",
                             "-lomp",
                             "-lm",
                             "-lpthread",
@@ -173,7 +177,7 @@ def _impl(ctx):
         target_system_name = "local",
         target_cpu = "k8",
         target_libc = "unknown",
-        compiler = "clang",
+        compiler = "g++-10",
         abi_version = "local",
         abi_libc_version = "local",
         cxx_builtin_include_directories = cxx_builtin_include_directories,
