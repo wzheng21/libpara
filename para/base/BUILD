@@ -10,7 +10,7 @@ cc_test(
   name = "mutex_test",
   srcs = ["mutex_test.cc"],
   deps = [
-    "@gtest//:gtest",
+    "//testing:testing_main",
     ":base",
   ]
 )
