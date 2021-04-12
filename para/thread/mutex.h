@@ -20,6 +20,7 @@ using SharedMutex = std::shared_mutex;
 using SharedMutex = std::shared_timed_mutex;
 #endif
 
+//TODO: Add support for lock strategy
 #if __cplusplus < 201703L
 template <typename MutexType>
 class MutexLock {
@@ -38,17 +39,31 @@ class MutexLock {
 };
 #endif
 
-// Class template to wrap up both
+// Class template to wrap up generic locks. Shared and unique locks share similar
+// interfaces so we create 1 generic class for them.
+// TODO: Extend interfaces to be consistent with std locks if needed
 template <template <typename> class LockType, typename MutexType>
 class GenericLock {
  public:
-  GenericLock() = default;
+  GenericLock() = delete;
+  explicit GenericLock(MutexType* mu) : mu_(mu), lk_(*mu_) {}
+  ~GenericLock() {
+    mu_->release();
+  }
+
+  void Release() {
+    mu_->release();
+  }
+
+ private:
+  LockType<MutexType> lk_;
+  MutexType* mu_;
 };
 
 template <typename MutexType>
 using UniqueLock = GenericLock<std::unique_lock, MutexType>;
-template <typename MutexType>
-using SharedLock = GenericLock<std::shared_lock, MutexType>;
+
+using SharedLock = GenericLock<std::shared_lock, SharedMutex>;
 
 // RAII wrapper to std::call_once
 class CallOnce {
