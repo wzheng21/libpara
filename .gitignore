@@ -54,3 +54,7 @@ build
 build*
 build/
 build/*
+
+external
+external*
+external/*
