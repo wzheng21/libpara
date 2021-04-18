@@ -1,4 +1,4 @@
-#include "para/base/mutex.h"
+#include "para/thread/mutex.h"
 
 #include "gtest/gtest.h"
 

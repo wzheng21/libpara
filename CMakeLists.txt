@@ -14,7 +14,17 @@ project(PARA LANGUAGES CXX VERSION ${PARA_VERSION})
 option(BUILD_TESTS "Build tests" OFF)
 
 # Project source files
-file(GLOB SRC_FILES "src/para/*/*.cc")
+file(GLOB_RECURSE SRC_FILES "src/*.cc")
+set(TEST_FILES "")
+foreach(item ${SRC_FILES})
+  if(${item} MATCHES "_test.cc$")
+    list(REMOVE_ITEM SRC_FILES ${item})
+    list(APPEND TEST_FILES ${item})
+  endif(${item} MATCHES "_test.cc$")    
+endforeach(item ${SRC_FILES})
+
+message(STATUS "Source files: ${SRC_FILES}")    
+message(STATUS "Test files: ${TEST_FILES}")    
 
 add_library(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
