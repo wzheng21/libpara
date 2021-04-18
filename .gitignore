@@ -49,3 +49,8 @@ bazel-genfiles
 bazel-out
 bazel-para
 bazel-testlogs
+
+build
+build*
+build/
+build/*
