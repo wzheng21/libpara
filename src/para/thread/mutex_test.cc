@@ -1,4 +1,4 @@
-#include "para/base/mutex.h"
+#include "para/thread/mutex.h"
 
 #include "gtest/gtest.h"
 
@@ -7,7 +7,7 @@ namespace para {
 TEST(MutexLock, MutexLock) {
   {
     Mutex mu;
-    MutexLock l(&mu);
+    MutexLock<Mutex> l(&mu);
   }
 
 #if __cplusplus >= 201703L
