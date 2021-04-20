@@ -1,8 +1,8 @@
-# para
+# libpara
 ## Introduction
 This library starts as the personal interest in practicing things learned
 from daily work or reading books on C++. The focus is on providing useful
-interfaces that can be reused in parallel.
+interfaces that can be reused in parallel, which is how the name came: lib(rary)para(llel)
 
 There are several main goals for this library eventually to lead to:
 * Support advanced threading features in old CXX standard (e.g. scoped lock in CXX11)
