@@ -1,4 +1,4 @@
-// Copyright 2021
+// Copyright (c) 2021
 // Authors: Weixiong (Victor) Zheng
 
 #pragma once
@@ -6,64 +6,42 @@
 #include <mutex>
 #include <shared_mutex>
 
-// Useful macros to provide thread-safety annotation
+#include "para/base/types.h"
+
+// Useful macros to provide thread-safety annotation in case of clang
+// see http://clang.llvm.org/docs/ThreadSafetyAnalysis.html
+#ifdef __clang__
 #define GUARDED_BY(x) __attribute__((guarded_by(x)))
+#else
+// No effect for non-clang compiler
+#define GUARDED_BY(x)
+#endif
 
 namespace para {
 
-// Aliases
-using Mutex = std::mutex;
-
 #if __cplusplus >= 201703L
-using SharedMutex = std::shared_mutex;
+using shared_mutex = std::shared_mutex;
 #else
-using SharedMutex = std::shared_timed_mutex;
+using shared_mutex = std::shared_timed_mutex;
 #endif
 
-//TODO: Add support for lock strategy
-#if __cplusplus < 201703L
-template <typename MutexType>
-class MutexLock {
- public:
-  explicit MutexLock(MutexType* mu) : lk_(*mu) {}
- private:
-  std::lock_guard<MutexType> lk_;
-};
-#else
+// A wrapper class with the eventual goal of enabling scoped_lock in C++2014
+// TODO: Add support for scoped_lock for <C++17
 template <typename... MutexTypes>
-class MutexLock {
+class ScopedLock {
  public:
-  explicit MutexLock(MutexTypes*... mu) : lk_(*mu...) {}
+  ScopedLock() = delete;
+  explicit ScopedLock(MutexTypes*... m);
+  ~ScopedLock() {}
+  NO_COPY_AND_ASSIGN(ScopedLock);
  private:
+#if __cplusplus >= 201703L
   std::scoped_lock<MutexTypes...> lk_;
-};
+#else
+  static_assert(sizeof...(MutexTypes) == 1);
+  std::lock_guard<MutexTypes...> lk_;
 #endif
-
-// Class template to wrap up generic locks. Shared and unique locks share similar
-// interfaces so we create 1 generic class for them.
-// TODO: Extend interfaces to be consistent with std locks if needed
-template <template <typename> class LockType, typename MutexType>
-class GenericLock {
- public:
-  GenericLock() = delete;
-  explicit GenericLock(MutexType* mu) : mu_(mu), lk_(*mu_) {}
-  ~GenericLock() {
-    mu_->release();
-  }
-
-  void Release() {
-    mu_->release();
-  }
-
- private:
-  LockType<MutexType> lk_;
-  MutexType* mu_;
 };
-
-template <typename MutexType>
-using UniqueLock = GenericLock<std::unique_lock, MutexType>;
-
-using SharedLock = GenericLock<std::shared_lock, SharedMutex>;
 
 // RAII wrapper to std::call_once
 class CallOnce {
@@ -78,3 +56,5 @@ class CallOnce {
 };
 
 };  // namespace para
+
+#include "para/thread/mutex-impl.h"
