@@ -33,10 +33,13 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                            $<INSTALL_INTERFACE:src>)
 
-list(APPEND INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/src)
-message(STATUS "Include dir: ${INTERFACE_INCLUDE_DIRECTORIES}")
-
-message(STATUS "Current bin dir: ${CMAKE_CURRENT_BINARY_DIR}")
+# Necessary third parties
+list(APPEND GLOG_LIB_HINTS "/usr/lib" "/usr/local/lib" "/usr/lib/x86_64-linux-gnu" ${GLOG_LIBRARIES} ${GLOG_LIBRARY})
+find_library(GLOG_LIB_PATH
+             NAMES glog
+             HINTS GLOG_LIB_HINTS REQUIRED)
+message(STATUS "Glog found at: ${GLOG_LIB_PATH}")
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${GLOG_LIB_PATH})
 
 # Maybe build tests
 message(STATUS "BUILD_TESTS: ${BUILD_TESTS}")

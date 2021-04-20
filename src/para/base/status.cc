@@ -1,12 +1,33 @@
 #include "para/base/status.h"
 
+#include <utility>
+
 namespace para {
 
-Status::Status() {}
-Status::~Status() {}
+// static
+Status Status::Error(std::string&& message) {
+  Status s;
+  s.message_ = std::forward<std::string>(message);
+  return s;
+}
+
+// static
+Status Status::Okay() {
+  return Status();
+}
 
 void Status::Update(const Status& other) {
+  if (other.okay()) return;
   message_ += " // ";
-  message_ += other.message();
+  message_ += other.ToString();
+}
+
+std::string Status::ToString() const {
+  return message_.empty() ? "OK" : ("FAIL: " + message_);
+}
+
+std::ostream& operator<<(std::ostream& stream, const Status& s) {
+  stream << s.ToString();
+  return stream;
 }
 }  // namespace para
