@@ -4,21 +4,11 @@
 
 namespace para {
 
-TEST(MutexLock, MutexLock) {
+TEST(Mutex, shared_mutex) {
   {
-    Mutex mu;
-    MutexLock<Mutex> l(&mu);
+    shared_mutex m;
+    std::lock_guard lk(m);
   }
-
-#if __cplusplus >= 201703L
-  {
-    LOG(INFO) << "testing scoped lock in 17+ standard";
-    Mutex m1, m2;
-    SharedMutex m3;
-    MutexLock l(&m1, &m2, &m3);
-  }
-#endif
-
 }
 
 }  // namespace para
