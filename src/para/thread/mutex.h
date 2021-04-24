@@ -25,24 +25,6 @@ using shared_mutex = std::shared_mutex;
 using shared_mutex = std::shared_timed_mutex;
 #endif
 
-// A wrapper class with the eventual goal of enabling scoped_lock in C++2014
-// TODO: Add support for scoped_lock for <C++17
-template <typename... MutexTypes>
-class ScopedLock {
- public:
-  ScopedLock() = delete;
-  explicit ScopedLock(MutexTypes*... m);
-  ~ScopedLock() {}
-  NO_COPY_AND_ASSIGN(ScopedLock);
- private:
-#if __cplusplus >= 201703L
-  std::scoped_lock<MutexTypes...> lk_;
-#else
-  static_assert(sizeof...(MutexTypes) == 1);
-  std::lock_guard<MutexTypes...> lk_;
-#endif
-};
-
 // RAII wrapper to std::call_once
 class CallOnce {
  public:
@@ -56,5 +38,3 @@ class CallOnce {
 };
 
 };  // namespace para
-
-#include "para/thread/mutex-impl.h"
