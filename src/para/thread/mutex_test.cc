@@ -7,7 +7,7 @@ namespace para {
 TEST(Mutex, shared_mutex) {
   {
     shared_mutex m;
-    std::lock_guard lk(m);
+    std::lock_guard<shared_mutex> lk(m);
   }
 }
 
