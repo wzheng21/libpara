@@ -1,3 +1,5 @@
+#pragma once
+
 #include <thread>
 
 namespace para {
@@ -37,6 +39,7 @@ class jthread {
   std::thread t_;
 };  // jthread
 
-
 #endif
 }  // namespace para
+
+#include "para/thread/thread-impl.h"

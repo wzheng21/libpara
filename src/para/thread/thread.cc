@@ -5,10 +5,6 @@ namespace para {
 // Constructors
 jthread::jthread(jthread&& other) noexcept : t_(std::move(other.t_)) {}
 
-template <typename Function, typename... Args>
-jthread::jthread(Function&& f, Args&&... args)
-    : t_(std::forward<Function>(f), std::forward<Args>(args)...) {}
-
 // move operator
 jthread& jthread::operator=(jthread&& other) noexcept {
   // from c++ concurrency in action page 29: check joinability before real operation
