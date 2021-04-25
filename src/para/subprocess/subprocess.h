@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <cmath>
 #include <string>
 #include <vector>
 
@@ -37,6 +38,9 @@ class EnvVars {
 struct SubprocessInput {
   std::vector<std::string> cmd;
   EnvVars envs;
+  // Will only be consumed by subprocess call with timeout functionality enabled.
+  // see timed_subprocess.h
+  double timeout_s = NAN;
 };
 
 struct SubprocessState {
