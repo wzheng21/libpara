@@ -15,7 +15,7 @@ cmake (>=3.10.0 && <= 3.19.0) is used to build the code.
 We will tend to support cxx11/14/17 at the same time. But for now, at least
 14 is required to compile tests
 
-If `BUILD_TESTS` option is turned on (`OFF` by default), user is required
+If `BUILD_TESTS` option is turned on (`ON` by default), user is required
 to have googletest preinstalled and searchable by CMake.
 
 ## Platforms
