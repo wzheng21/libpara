@@ -30,8 +30,8 @@
 #define SCOPED_LOCK_2(UNIQUE_MUTEX1, UNIQUE_MUTEX2)                    \
   do {                                                                 \
     std::lock(UNIQUE_MUTEX1, UNIQUE_MUTEX2);                           \
-    std::lock_guard SCOPED_LOCK2_LOCK1(UNIQUE_MUTEX1, std::adopt_lock);\
-    std::lock_guard SCOPED_LOCK2_LOCK2(UNIQUE_MUTEX2, std::adopt_lock);\
+    std::lock_guard<decltype(UNIQUE_MUTEX1)> SCOPED_LOCK2_LOCK1(UNIQUE_MUTEX1, std::adopt_lock);\
+    std::lock_guard<decltype(UNIQUE_MUTEX2)> SCOPED_LOCK2_LOCK2(UNIQUE_MUTEX2, std::adopt_lock);\
   } while (false)
 #endif
 

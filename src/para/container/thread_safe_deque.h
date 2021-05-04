@@ -7,6 +7,7 @@
 #pragma once
 
 #include <deque>
+#include <mutex>
 
 #include "para/thread/mutex.h"
 
@@ -30,10 +31,10 @@ class ThreadSafeDeque {
   void PushBack(T&& val);
   void PushFront(T&& val);
   void Swap(ThreadSafeDeque* other);
-  bool Empty();
+  bool Empty() const;
 
  private:
-  shared_mutex m_;
+  std::mutex m_;
   std::deque<T> dq_ GUARDED_BY(m_);
 };
 
