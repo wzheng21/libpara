@@ -9,45 +9,45 @@
 namespace para {
 
 // Constructors
-jthread::jthread(jthread&& other) noexcept : t_(std::move(other.t_)) {}
+JoinableThread::JoinableThread(JoinableThread&& other) noexcept : t_(std::move(other.t_)) {}
 
 // move operator
-jthread& jthread::operator=(jthread&& other) noexcept {
+JoinableThread& JoinableThread::operator=(JoinableThread&& other) noexcept {
   // from c++ concurrency in action page 29: check joinability before real operation
-  if (joinable()) join();
+  if (Joinable()) Join();
   t_ = std::move(other.t_);
   return *this;
 }
 
 // destructor: join if possible
-jthread::~jthread() {
-  if (joinable()) join();
+JoinableThread::~JoinableThread() {
+  if (Joinable()) Join();
 }
 
 // observers
-bool jthread::joinable() {
+bool JoinableThread::Joinable() {
   return t_.joinable();
 }
 
-jthread::id jthread::get_id() const noexcept {
+JoinableThread::id JoinableThread::get_id() const noexcept {
   return t_.get_id();
 }
 
 // static
-unsigned int jthread::hardware_concurrency() noexcept {
+unsigned int JoinableThread::hardware_concurrency() noexcept {
   return std::thread::hardware_concurrency();
 }
 
 // operations
-void jthread::join() {
-  if (joinable()) t_.join();
+void JoinableThread::Join() {
+  if (Joinable()) t_.join();
 }
 
-void jthread::detach() {
+void JoinableThread::Detach() {
   t_.detach();
 }
 
-void jthread::swap(jthread& other) noexcept {
+void JoinableThread::Swap(JoinableThread& other) noexcept {
   t_.swap(other.t_);
 }
 }  // namespace para

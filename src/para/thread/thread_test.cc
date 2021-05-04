@@ -10,16 +10,16 @@
 
 namespace para {
 
-TEST(jthread, Basic) {
-  jthread t1([](){ 
+TEST(JoinableThread, Basic) {
+  JoinableThread t1([](){ 
     LOG(INFO) << "Start to sleep ";
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(1s);
     LOG(INFO) << "Wake up"; 
   });
-  LOG(INFO) << "jthread t1 id: " << t1.get_id();
-  jthread t2 = std::move(t1);
-  LOG(INFO) << "jthread t2 id: " << t2.get_id();
+  LOG(INFO) << "JoinableThread t1 id: " << t1.get_id();
+  JoinableThread t2 = std::move(t1);
+  LOG(INFO) << "JoinableThread t2 id: " << t2.get_id();
 }
 
 }  // namespace para

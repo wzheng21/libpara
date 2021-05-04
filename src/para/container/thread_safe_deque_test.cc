@@ -32,8 +32,8 @@ TEST(ThreadSafeDeque, Basic) {
     }
   };
   {
-    jthread t1(t, 0);
-    jthread t2(t, 5);
+    JoinableThread t1(t, 0);
+    JoinableThread t2(t, 5);
   }
   ASSERT_EQ(num_true, 10);
   ASSERT_EQ(tot, 55);
