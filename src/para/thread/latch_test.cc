@@ -8,7 +8,7 @@
 
 #include "para/thread/latch.h"
 #include "para/thread/thread.h"
-
+#include "para/base/time.h"
 #include "para/testing/testing.h"
 
 namespace para {
@@ -24,10 +24,10 @@ TEST(Latch, Basic) {
   JoinableThread t1(f);
   JoinableThread t2(f);
   using namespace std::chrono_literals;
-  std::this_thread::sleep_for(500ms);
+  SleepForSeconds(0.5);
   LOG(INFO) << "Decrement latch 1";
   lt.CountDown();
-  std::this_thread::sleep_for(500ms);
+  SleepForSeconds(0.5);
   LOG(INFO) << "Decrement latch 2";
   lt.CountDown();
 }
