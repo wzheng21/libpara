@@ -10,42 +10,37 @@
 
 namespace para {
 
-#if __cplusplus > 201703L
-using jthread = std::jthread;
-#else
-
 // Simple implementaion of joinable thread available in C++20.
 // With this, thread will be used in RAII fashion
-// see: https://en.cppreference.com/w/cpp/thread/jthread
-class jthread {
+// see: https://en.cppreference.com/w/cpp/thread/JoinableThread
+class JoinableThread {
  public:
   // member types
   using id = std::thread::id;
   using native_handle_type = std::thread::native_handle_type;
 
-  jthread() noexcept = default;
-  jthread(const jthread&) = delete;
-  jthread(jthread&& other) noexcept;
+  JoinableThread() noexcept = default;
+  JoinableThread(const JoinableThread&) = delete;
+  JoinableThread(JoinableThread&& other) noexcept;
   template <typename Function, typename... Args>
-  explicit jthread(Function&& f, Args&&... args);
-  ~jthread();
+  explicit JoinableThread(Function&& f, Args&&... args);
+  ~JoinableThread();
 
   // operators
-  jthread& operator=(jthread&& other) noexcept;
+  JoinableThread& operator=(JoinableThread&& other) noexcept;
   // observers
-  bool joinable();
+  bool Joinable();
   id get_id() const noexcept;
   static unsigned int hardware_concurrency() noexcept;
   // operations
-  void join();
-  void detach();
-  void swap(jthread& other) noexcept;
+  void Join();
+  void Detach();
+  void Swap(JoinableThread& other) noexcept;
 
  private:
   std::thread t_;
-};  // jthread
+};  // JoinableThread
 
-#endif
 }  // namespace para
 
 #include "para/thread/thread-impl.h"
