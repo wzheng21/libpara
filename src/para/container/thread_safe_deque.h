@@ -30,11 +30,13 @@ class ThreadSafeDeque {
   bool TryPopBack(T* val);
   void PushBack(T&& val);
   void PushFront(T&& val);
+  void PushBack(const T& val);
+  void PushFront(const T& val);
   void Swap(ThreadSafeDeque* other);
   bool Empty() const;
 
  private:
-  std::mutex m_;
+  mutable std::mutex m_;
   std::deque<T> dq_ GUARDED_BY(m_);
 };
 

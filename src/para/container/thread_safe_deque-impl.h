@@ -70,6 +70,18 @@ void ThreadSafeDeque<T>::PushBack(T&& val) {
 }
 
 template <typename T>
+void ThreadSafeDeque<T>::PushFront(const T& val) {
+  std::lock_guard<std::mutex> lk(m_);
+  dq_.push_front(val);
+}
+
+template <typename T>
+void ThreadSafeDeque<T>::PushBack(const T& val) {
+  std::lock_guard<std::mutex> lk(m_);
+  dq_.push_back(val);
+}
+
+template <typename T>
 void ThreadSafeDeque<T>::Swap(ThreadSafeDeque* other) {
   SCOPED_LOCK_2(m_, other->m_);
   dq_.swap(other->dq_);
