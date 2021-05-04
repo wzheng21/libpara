@@ -22,11 +22,11 @@ foreach(item ${SRC_FILES})
   if(${item} MATCHES "_test.cc$" OR ${item} MATCHES "testing_main.cc$")
     list(REMOVE_ITEM SRC_FILES ${item})
     list(APPEND TEST_FILES ${item})
-  endif(${item} MATCHES "_test.cc$" OR ${item} MATCHES "testing_main.cc$")    
+  endif(${item} MATCHES "_test.cc$" OR ${item} MATCHES "testing_main.cc$")
 endforeach(item ${SRC_FILES})
 
-message(STATUS "Source files: ${SRC_FILES}")    
-message(STATUS "Test files: ${TEST_FILES}")    
+message(STATUS "Source files: ${SRC_FILES}")
+message(STATUS "Test files: ${TEST_FILES}")
 
 add_library(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
@@ -39,6 +39,13 @@ find_library(GLOG_LIB_PATH
              NAMES glog
              HINTS GLOG_LIB_HINTS REQUIRED)
 message(STATUS "Glog found at: ${GLOG_LIB_PATH}")
+list(APPEND GLOG_INCLUDE_DIR_HINTS "/usr/include" "/usr/local/include" ${GLOG_INCLUDE_DIR} ${GLOG_INCLUDE_DIRS})
+find_path(GLOG_INCLUDE_ROOT
+          glog/logging.h
+          HINTS GLOG_INCLUDE_DIR_HINTS REQUIRED)
+message(STATUS "Glog include dir found at: ${GLOG_INCLUDE_ROOT}")
+target_include_directories(${CMAKE_PROJECT_NAME}
+                           PRIVATE ${GLOG_INCLUDE_ROOT})
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${GLOG_LIB_PATH})
 
 # Maybe build tests
