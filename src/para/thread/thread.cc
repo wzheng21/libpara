@@ -8,6 +8,8 @@
 
 namespace para {
 
+std::thread::id this_thread_id() { return std::this_thread::get_id(); }
+
 // Constructors
 JoinableThread::JoinableThread(JoinableThread&& other) noexcept : t_(std::move(other.t_)) {}
 

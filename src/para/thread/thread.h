@@ -10,6 +10,9 @@
 
 namespace para {
 
+// Convenience functions
+std::thread::id this_thread_id();
+
 // Simple implementaion of joinable thread available in C++20.
 // With this, thread will be used in RAII fashion
 // see: https://en.cppreference.com/w/cpp/thread/JoinableThread
