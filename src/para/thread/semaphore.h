@@ -27,4 +27,18 @@ class CountingSemaphore {
   int acquired_ GUARDED_BY(m_);
 };
 
+// A naive implementation of binary semaphore using CountingSemaphore under the
+// hood. Note that this impl is rather for learning, not optimized for performance
+// and should be avoid. Use mutex instead for performance
+class BinarySemaphore {
+ public:
+  BinarySemaphore();
+  ~BinarySemaphore();
+
+  void Acquire();
+  void Release();
+ private:
+  CountingSemaphore sem_;
+};
+
 }  // namespace para
