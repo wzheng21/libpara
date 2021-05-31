@@ -35,4 +35,15 @@ void CountingSemaphore::Release() {
   }
 }
 
+BinarySemaphore::BinarySemaphore() : sem_(1) {}
+BinarySemaphore::~BinarySemaphore() {}
+
+void BinarySemaphore::Acquire() {
+  sem_.Acquire();
+}
+
+void BinarySemaphore::Release() {
+  sem_.Release();
+}
+
 }  // namespace para
