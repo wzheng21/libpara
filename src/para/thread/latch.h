@@ -12,7 +12,7 @@
 
 namespace para {
 
-// This is a simplified lock-based implementation of std::latch
+// This is a simplified lock-based implementation of std::latch (C++20)
 class Latch {
  public:
   Latch() = delete;
@@ -21,6 +21,8 @@ class Latch {
 
   void CountDown();
   void Wait() const;
+  // Decrements the counter and blocks until it reaches zero
+  void ArriveAndWait();
 
  private:
   mutable std::mutex m_;
