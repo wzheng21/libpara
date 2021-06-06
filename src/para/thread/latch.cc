@@ -28,4 +28,9 @@ void Latch::Wait() const {
   cv_.wait(lk, [this](){ return counts_ == 0; });
 }
 
+void Latch::ArriveAndWait() {
+  CountDown();
+  Wait();
+}
+
 }  // namespace para
