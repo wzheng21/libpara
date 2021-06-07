@@ -54,4 +54,32 @@ TEST(Barrier, Drop) {
   });
 }
 
+TEST(Barrier, MultipleDrops) {
+  Barrier sync_point(3);
+  std::vector<JoinableThread> ts;
+  for (int i = 1; i <= 3; ++i) {
+    ts.emplace_back([i, &sync_point]() {
+      LOG(INFO) << "Thread " << i << " sleeping for seconds: " << i;
+      SleepForSeconds(static_cast<double>(i));
+      if (i == 3) {
+        LOG(INFO) << "Thread 3 drops";
+        sync_point.ArriveAndDrop();
+        return;
+      }
+      LOG(INFO) << "Thread " << i << " waiting";
+      sync_point.ArriveAndWait();
+      LOG(INFO) << "Thread " << i << " sleeping for another seconds: " << i;
+      SleepForSeconds(static_cast<double>(i));
+      if (i == 2) {
+        LOG(INFO) << "Thread 2 drops";
+        sync_point.ArriveAndDrop();
+        return;
+      }
+      LOG(INFO) << "Thread " << i << " waiting";
+      sync_point.ArriveAndWait();
+      LOG(INFO) << "Thread " << i << " done";      
+    });
+  }
+}
+
 }  // namespace para
