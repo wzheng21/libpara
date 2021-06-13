@@ -22,4 +22,16 @@ TEST(JoinableThread, Basic) {
   LOG(INFO) << "JoinableThread t2 id: " << t2.get_id();
 }
 
+TEST(ThreadJoiner, Basic) {
+  std::vector<std::thread> ts;
+  for (int i = 1; i <= 2; ++i) {
+    ts.emplace_back([i](){
+      LOG(INFO) << "Thread " << i << " sleeping for " << i << " seconds";
+      SleepForSeconds(static_cast<double>(i));
+      LOG(INFO) << "Thread " << i << " done";
+    });
+  }
+  ThreadJoiner joiner(&ts);
+}
+
 }  // namespace para

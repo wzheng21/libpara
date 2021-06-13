@@ -7,6 +7,9 @@
 #pragma once
 
 #include <thread>
+#include <vector>
+
+#include "para/base/types.h"
 
 namespace para {
 
@@ -43,6 +46,19 @@ class JoinableThread {
  private:
   std::thread t_;
 };  // JoinableThread
+
+// Inspired by join_threads on Page 275 of C++ Concurrency in Action (2nd edition)
+  // Note that threads_ must be initialized before the joiner
+class ThreadJoiner {
+ public:
+  ThreadJoiner() = delete;
+  explicit ThreadJoiner(std::vector<std::thread>* threads);
+  ~ThreadJoiner();
+
+ private:
+  std::vector<std::thread>* threads_ = nullptr;
+  NO_COPY_AND_ASSIGN(ThreadJoiner);
+};
 
 }  // namespace para
 

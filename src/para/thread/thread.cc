@@ -6,6 +6,8 @@
 
 #include "para/thread/thread.h"
 
+#include "glog/logging.h"
+
 namespace para {
 
 std::thread::id this_thread_id() { return std::this_thread::get_id(); }
@@ -51,5 +53,17 @@ void JoinableThread::Detach() {
 
 void JoinableThread::Swap(JoinableThread& other) noexcept {
   t_.swap(other.t_);
+}
+
+ThreadJoiner::ThreadJoiner(std::vector<std::thread>* threads) : threads_(threads) {
+
+}
+
+
+
+ThreadJoiner::~ThreadJoiner() {
+  for (std::thread& t : *threads_) {
+    if (t.joinable()) t.join();
+  }
 }
 }  // namespace para
