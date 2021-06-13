@@ -23,6 +23,9 @@ foreach(item ${SRC_FILES})
     list(REMOVE_ITEM SRC_FILES ${item})
     list(APPEND TEST_FILES ${item})
   endif(${item} MATCHES "_test.cc$" OR ${item} MATCHES "testing_main.cc$")
+  if(${item} MATCHES "testing_main.cc$")
+    set(TEST_MAIN ${item})
+  endif(${item} MATCHES "testing_main.cc$")
 endforeach(item ${SRC_FILES})
 
 message(STATUS "Source files: ${SRC_FILES}")
@@ -59,6 +62,17 @@ if(BUILD_TESTS)
   #TODO: The following would not work for cmake 3.20
   target_link_libraries(all_tests PRIVATE GTest::GTest)
   gtest_discover_tests(all_tests)
+
+  # set up a test target per test
+  foreach(test_file ${TEST_FILES})
+    get_filename_component(stem ${test_file} NAME_WE)
+    message("Build test: ${stem} for ${test_file}")
+    add_executable(${stem} ${test_file} ${TEST_MAIN})
+    target_link_libraries(${stem} PRIVATE ${CMAKE_PROJECT_NAME})
+    target_link_libraries(${stem} PRIVATE GTest::GTest)
+    gtest_discover_tests(${stem})
+  endforeach(test_file ${TEST_FILES})
+  
 endif(BUILD_TESTS)
 
 # Install the actual library. This will export target PARA::PARA
