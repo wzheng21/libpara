@@ -16,7 +16,7 @@ TEST(SimpleThreadPool, Basic) {
   SimpleThreadPool pool(2);
   for (int i = 1; i <= 5; ++i) {
     pool.Submit([i](){
-      LOG(INFO) << i << " second sleeping, Thread " << i;
+      LOG(INFO) << "Sleep, Thread " << i;
       SleepForSeconds(1.);
       LOG(INFO) << "Wake up, Thread " << i;
     });

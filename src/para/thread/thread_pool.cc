@@ -25,7 +25,7 @@ SimpleThreadPool::~SimpleThreadPool() {
 }
 
 void SimpleThreadPool::Work() {
-  while (!done_) {
+  while (!done_ || !closures_.Empty()) {
     Closure f;
     if (closures_.TryPopFront(&f)) {
       f();
