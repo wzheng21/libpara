@@ -56,14 +56,17 @@ void JoinableThread::Swap(JoinableThread& other) noexcept {
 }
 
 ThreadJoiner::ThreadJoiner(std::vector<std::thread>* threads) : threads_(threads) {
-
+  CHECK(threads != nullptr);
 }
-
-
 
 ThreadJoiner::~ThreadJoiner() {
   for (std::thread& t : *threads_) {
     if (t.joinable()) t.join();
   }
+}
+
+void ThreadJoiner::SetThreads(std::vector<std::thread>* threads) {
+  CHECK(threads != nullptr);
+  threads_ = threads;
 }
 }  // namespace para

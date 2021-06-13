@@ -13,7 +13,7 @@ set(PARA_VERSION 0.0.0)
 project(PARA LANGUAGES CXX VERSION ${PARA_VERSION})
 set(LIBNAME "${CMAKE_PROJECT_NAME}_dev")
 
-option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_TESTS "Build tests" ON)
 
 # Project source files
 file(GLOB_RECURSE SRC_FILES "src/**/*.cc")
