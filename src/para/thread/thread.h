@@ -51,9 +51,11 @@ class JoinableThread {
   // Note that threads_ must be initialized before the joiner
 class ThreadJoiner {
  public:
-  ThreadJoiner() = delete;
+  ThreadJoiner() = default;
   explicit ThreadJoiner(std::vector<std::thread>* threads);
   ~ThreadJoiner();
+
+  void SetThreads(std::vector<std::thread>* threads);
 
  private:
   std::vector<std::thread>* threads_ = nullptr;
