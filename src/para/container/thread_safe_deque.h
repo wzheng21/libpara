@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <condition_variable>
 #include <deque>
 #include <mutex>
 
@@ -34,10 +35,15 @@ class ThreadSafeDeque {
   void PushFront(const T& val);
   void Swap(ThreadSafeDeque* other);
   bool Empty() const;
+  // The following two APIs will try to pop. If the deque is empty, both will
+  // wait until internal deque is not empty to pop
+  void WaitAndPopFront(T* val);
+  void WaitAndPopBack(T* val);
 
  private:
   mutable std::mutex m_;
   std::deque<T> dq_ GUARDED_BY(m_);
+  std::condition_variable cv_;
 };
 
 }  // namespace para
