@@ -73,12 +73,14 @@ template <typename T>
 void ThreadSafeDeque<T>::PushFront(const T& val) {
   std::lock_guard<std::mutex> lk(m_);
   dq_.push_front(val);
+  cv_.notify_all();
 }
 
 template <typename T>
 void ThreadSafeDeque<T>::PushBack(const T& val) {
   std::lock_guard<std::mutex> lk(m_);
   dq_.push_back(val);
+  cv_.notify_all();
 }
 
 template <typename T>
@@ -91,6 +93,22 @@ template <typename T>
 bool ThreadSafeDeque<T>::Empty() const {
   std::lock_guard<std::mutex> lk(m_);
   return dq_.empty();
+}
+
+template <typename T>
+void ThreadSafeDeque<T>::WaitAndPopFront(T* val) {
+  std::unique_lock<std::mutex> lk(m_);
+  cv_.wait(lk, [this](){ return !dq_.empty(); });
+  *val = dq_.front();
+  dq_.pop_front();
+}
+
+template <typename T>
+void ThreadSafeDeque<T>::WaitAndPopBack(T* val) {
+  std::unique_lock<std::mutex> lk(m_);
+  cv_.wait(lk, [this](){ return !dq_.empty(); });
+  *val = dq_.back();
+  dq_.pop_back();
 }
 
 }  // namespace para
